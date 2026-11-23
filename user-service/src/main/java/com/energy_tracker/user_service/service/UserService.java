@@ -1,6 +1,7 @@
 package com.energy_tracker.user_service.service;
 
 import com.energy_tracker.user_service.dto.UserDto;
+import com.energy_tracker.user_service.exception.UserNotFoundException;
 import com.energy_tracker.user_service.model.User;
 import com.energy_tracker.user_service.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,8 @@ public class UserService {
     }
 
     public String updateUser(Long id,UserDto userDto){
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User user = userRepository.findById(id)
+                                  .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -51,7 +53,7 @@ public class UserService {
 
     public String deleteUserById(Long id){
         if(!userRepository.existsById(id)){
-            throw new IllegalArgumentException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         userRepository.deleteById(id);
         return "User deleted successfully";
