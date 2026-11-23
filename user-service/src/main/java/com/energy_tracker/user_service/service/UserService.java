@@ -34,7 +34,7 @@ public class UserService {
     public UserDto getUserByEmail(Long id){
         return userRepository.findById(id)
                              .map(this::toUserDto)
-                             .orElse(null);
+                             .orElseThrow(()->new UserNotFoundException("User not found"));
     }
 
     public String updateUser(Long id,UserDto userDto){
